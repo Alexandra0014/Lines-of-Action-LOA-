@@ -1,0 +1,31 @@
+- No nos interesa la profundiad, sino el tiempo --> contra más rapido mejor
+- Iterative deepening --
+- Li HE de dir quan parar
+- HE DE TENIR GUARDAT DEL RECORREGUT ANTERIOR --> Amb Zobrist Hashing
+	(per que com li dius quan parar pos ha de tenir el resultat del recorregut anterior)
+- OBJECTIU: agrupar totes les teves fitxes en un punt 
+- La chicha está en como se mueven 
+	*Pots moure totes les teves fitxes en totes les direccions PERO un NUM en concret de pos, aquest num és 	segons quantes fitxes tens en horitzontal,vertical i diagonal 
+	* ES POT SALTAR LA MEVA FITXA
+	* Si caus a sobre d'una peça d'un adversari te la menjes
+- GUANYA qui te el max nombre de fitxes juntes(onnectades) 
+- COMPTE !!!: NO S'HA DE MENJAR MOLT per que te pot perjudicar
+		*per que si menjes tot guanya l'oponent per que només li queda una fitxa i està tot en una pos
+		per tant guanya
+- En cas d'empat de matar-nos entre nosaltres  --> guanya qui te la iniciativa qui ha tirat
+- ESTRATEGIA: combo de bloquejos + agrupar les nostres
+- ESTRATEGIA: Control del centre del tauler
+- timeout() posar un boolear = true
+	*nosaltres hem de tallar el boolean quan le diem que pari, y veure la millor sol amb minimax
+- Separar el proceso por profundidades
+	*Con el minimax bien hecho solo hay que aumnetar la profundidad en un bucle
+- getMoves es el que fa que s'ilumini el tauler en les pos --> JA ESTA FETA
+- S'haurà de demanar les pos per fer les nostres cosis
+FER 2FASES:
+	FASE1 --> com el Connecta 4 per Nivells de prof
+ 	FASE2 --> afegir lo de saber parar i agafar la millor solució
+- OJO en el Game me diu els torns i el 4 es el time out
+- DIFFICULT --> són 12 fitxes
+	*podem baixar el nivell de dificultat per probar coses ràpides
+- Factor embrancament Connecta4 --> t.getMida(col)
+	*inicialment és 8 //8^4 <-- factor embrancament amb 4 de profunditat
