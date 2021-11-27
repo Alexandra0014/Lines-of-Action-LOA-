@@ -8,25 +8,28 @@ import javax.swing.SwingUtilities;
 
 /**
  * Lines Of Action: el joc de taula.
+ *
  * @author bernat
  */
 public class Game {
-        /**
+
+    /**
      * @param args
      */
     public static void main(String[] args) {
-        
-        
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                
+
                 IPlayer player1 = new HumanPlayer("Octopus");
+                //IPlayer player1 = new NotCheckers("NotCheckers");
+
                 //IPlayer player1 = new RandomPlayer("Crazy Chris");
                 IPlayer player2 = new RandomPlayer("Crazy Ivan");
-                                
-                new Board(player1 , player2, 4, Level.DIFFICULT);
-             }
+
+                new Board(player1, player2, 4, Level.DIFFICULT);
+            }
         });
     }
 }
