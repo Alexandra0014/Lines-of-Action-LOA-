@@ -4,6 +4,7 @@
  */
 package edu.upc.epsevg.prop.loa.players;
 
+import edu.upc.epsevg.prop.loa.Board;
 import edu.upc.epsevg.prop.loa.CellType;
 import edu.upc.epsevg.prop.loa.GameStatus;
 import edu.upc.epsevg.prop.loa.IAuto;
@@ -20,12 +21,39 @@ import java.util.Random;
  */
 public class NotCheckers implements IPlayer, IAuto {
 
+   //Globales
     private String name;
     private GameStatus gs;
     Boolean TimeOut = false;
-
-    public NotCheckers(String name) {
+    int prof = 0;
+    int infneg= -99999999;    //-inf
+    int infpos= 99999999;     // +inf
+    int cont = 0;             //contador dels nodes explorats (OJO HAY UNA FUNCIÓN EN Move que te lo dice)
+    CellType jugadorACT;
+    
+//-------------------------------
+    public NotCheckers(String name,int p) {
         this.name = name;
+        prof = p;
+    }
+
+    public int Tria_Moviment(GameStatus bstatus, CellType player, int profunditat, Point pos){
+        int alfa = infneg;
+        int beta = infpos;
+        int millorMov = 0;  //Millor pos. on es possarà les fitxes
+        int heu = 0;        //Resultat de l'heuristica
+        Point posFrom = bstatus.
+        for(int col = 0; col < bstatus.getSize(); col++)  //Recorrem totes les columnes de la taula sense passar-nos del size
+        {
+            ArrayList<Point> points =  bstatus.getMoves(pos);
+            if (points.size() != 0) {
+                GameStatus prova = new GameStatus(bstatus);
+                prova.movePiece(pos, pos);
+            }
+            
+            
+        }
+         
     }
 
     @Override
