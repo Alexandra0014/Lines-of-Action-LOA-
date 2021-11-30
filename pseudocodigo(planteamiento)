@@ -1,11 +1,22 @@
-Saber la cantidad de fihas que hay en el tablero de cada momento
+Heuristica 1:
+Saber la cantidad de fichas que hay en el tablero de cada momento
 En cada posicion mirar la cantidad de fichas agrupadas que tenemos:
     - Explorar mientras el numero de fichas agrupadas sea menor al de la cantidad de fichas del tablero.
     - Cuando encontramos una ficha nuestra seguir explorando en esa direccion.
     - Cuando encontramos la ficha del rival cambiar la direccion que se explora
     - Cuando econtramos un espacio cambiar la direccion que se explora
     - Para evitar ciclos comprobar que la posicion que vamos a explorar no la hemos mirado antes
-Recursividad
+Recursividad??
+
+Heuristicas:
+Contar la distancia que estamos del mayor grupo de fichas
+Contar la cantidad de grupos que tenemos
+Priorizar hacer el grupo en el centro del tablero
+
+Pasos aconsellats per al Bernat:
+    1-Definir les heuristiques
+    2-Implementarles
+    3-Testejar amb diferents casos 
 
 Sentido de exploracion:
     i -> fila
@@ -18,17 +29,18 @@ Sentido de exploracion:
 Pseudocodigo:
     int direccion = 1 //indica en la direccion que estamos explorando
     int contFichas = 1 //cuenta la cantidad de ficha agrupadas que tenemos
-    int FichasTablero = 12 //como inicia el tablero
+    int FichasTablero = getNumberOfPiecesPerColor(color) //como inicia la fichas que hay en el tablero
     int filAux = fila;
     int colAux = col;   
 
     while(direccion<8 and contFichas<FichasTablero) {
-        if (direccion == 1) -> [i+1,j]
-        else if (direccion == 2) -> [i+1,j+1]
-        else if (direccion == 3) -> [i,j+1]
-        else if (direccion == 4) -> [i-1,j+1]
-        else if (direccion == 5) -> [i-1,j]
-        else if (direccion == 6) -> [i-1,j-1]
-        else if (direccion == 7) -> [i,j-1]
-        else if (direccion == 8) -> [i+1,j-1]
+        validateCordinates(int i, int j) // validar si la posicion es correcta
+            if (direccion == 1) -> [i+1,j]
+            else if (direccion == 2) -> [i+1,j+1]
+            else if (direccion == 3) -> [i,j+1]
+            else if (direccion == 4) -> [i-1,j+1]
+            else if (direccion == 5) -> [i-1,j]
+            else if (direccion == 6) -> [i-1,j-1]
+            else if (direccion == 7) -> [i,j-1]
+            else if (direccion == 8) -> [i+1,j-1]
     }
