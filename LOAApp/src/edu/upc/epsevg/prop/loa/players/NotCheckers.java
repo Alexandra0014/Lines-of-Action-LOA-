@@ -21,76 +21,141 @@ import java.util.Random;
  */
 public class NotCheckers implements IPlayer, IAuto {
 
-   //Globales
+    //Globales
     private String name;
     private GameStatus gs;
     Boolean TimeOut = false;
     int prof = 0;
-    int infneg= -99999999;    //-inf
-    int infpos= 99999999;     // +inf
+    int infneg = -99999999;    //-inf
+    int infpos = 99999999;     // +inf
     int cont = 0;             //contador dels nodes explorats (OJO HAY UNA FUNCIÓN EN Move que te lo dice)
     CellType jugadorACT;
-    
+    Point PosFrom;
+    Point PosTo;
+
 //-------------------------------
-    public NotCheckers(String name,int p) {
+    public NotCheckers(String name, int p) {
         this.name = name;
         prof = p;
     }
 
-    public int Tria_Moviment(GameStatus bstatus, CellType player, int profunditat, Point pos){
+    @Override
+    public Move move(GameStatus gs) {
+        int valor = infneg;
         int alfa = infneg;
         int beta = infpos;
         int millorMov = 0;  //Millor pos. on es possarà les fitxes
         int heu = 0;        //Resultat de l'heuristica
-        Point posFrom = bstatus.
-        for(int col = 0; col < bstatus.getSize(); col++)  //Recorrem totes les columnes de la taula sense passar-nos del size
-        {
-            ArrayList<Point> points =  bstatus.getMoves(pos);
-            if (points.size() != 0) {
-                GameStatus prova = new GameStatus(bstatus);
-                prova.movePiece(pos, pos);
-            }
-            
-            
-        }
-         
-    }
-
-    @Override
-    public Move move(GameStatus gs) {
-        
         CellType color = gs.getCurrentPlayer();
-        this.gs = gs;
-        int qn = gs.getNumberOfPiecesPerColor(color);
-        ArrayList<Point> pendingAmazons = new ArrayList<>();
-        for (int q = 0; q < qn; q++) {
-            pendingAmazons.add(gs.getPiece(color, q));
-        }
-        // Iterem aleatòriament per les peces fins que trobem una que es pot moure.
-        Point queenTo = null;
-        Point queenFrom = null;
-        while (queenTo == null) {
-            Random rand = new Random();
-            int q = rand.nextInt(pendingAmazons.size());
-            queenFrom = pendingAmazons.remove(q);
-            //queenTo = posicioRandomAmazon(gs, queenFrom);
-        }
 
-        // "s" és una còpia del tauler, per es pot manipular sense perill
-        gs.movePiece(queenFrom, queenTo);
+        for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
+            PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
+            ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
+            if (points.size() != 0) { //si nos podemos mover
+                for (int mov = 0; mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
+                    PosTo = points.get(mov); //Obtenemos una posicion de destino
+                    GameStatus aux = new GameStatus(gs);
+                    aux.movePiece(PosFrom, PosTo);
+                    CellType colorRival = color.opposite(color);
+                    heu = min_Valor(aux, colorRival, alfa, beta, prof - 1, mov);
+                    if (valor <= heu) {
+                        millorMov = i;
+                        valor = heu;
+                    }
+                }
+            }
 
-        return new Move(queenFrom, queenTo, 0, 0, SearchType.RANDOM);
+        }
+        return new Move(PosFrom, PosTo, 0, 0, SearchType.MINIMAX);
     }
 
-    @Override
-    public void timeout() {
-        TimeOut = true;
-    }
+    public int min_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat, int col) {
 
-    @Override
-    public String getName() {
-        return name;
+        int valor;
+        cont++;
+        if (gs.isGameOver()) {
+            return infpos;
+
+        } else if (profunditat == 0) {
+            //return heuristica(t, color * -1);
+            return 0;
+
+        } else {
+            valor = infpos;
+            for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
+                PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
+                ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
+                if (points.size() != 0) { //si nos podemos mover
+                    for (int mov = 0; mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
+                        PosTo = points.get(mov); //Obtenemos una posicion de destino
+                        GameStatus aux = new GameStatus(gs);
+                        aux.movePiece(PosFrom, PosTo);
+                        CellType colorRival = color.opposite(color); //color del contrario -*-=+
+                        valor = Integer.min(valor, max_Valor(aux, colorRival, alfa, beta, prof - 1, mov));
+                        beta = Integer.min(valor, beta);
+                        if (beta <= alfa) {
+                            return valor;
+                        }
+
+                    }
+                }
+            }
+        }
+        return valor;
     }
     
+    public int max_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat, int col) {
 
-}
+        int valor;
+        cont++;
+        if (gs.isGameOver()) {
+            return infneg;
+
+        } else if (profunditat == 0) {
+            //return heuristica(t, color * -1);
+            return 0;
+
+        } else {
+            valor = infneg;
+            for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
+                PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
+                ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
+                if (points.size() != 0) { //si nos podemos mover
+                    for (int mov = 0; mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
+                        PosTo = points.get(mov); //Obtenemos una posicion de destino
+                        GameStatus aux = new GameStatus(gs);
+                        aux.movePiece(PosFrom, PosTo);
+                        CellType colorRival = color.opposite(color); //color del contrario -*-=+
+                        valor = Integer.max(valor, min_Valor(aux, colorRival, alfa, beta, prof - 1, mov));
+                        alfa = Integer.min(valor, beta);
+                        if (beta <= alfa) {
+                            return valor;
+                        }
+                    }
+                }
+            }
+        }
+        return valor;
+    }
+    
+  
+    
+    
+
+        @Override
+        public void timeout
+                
+        
+            () {
+        TimeOut = true;
+        }
+
+        @Override
+        public String getName
+                
+        
+            () {
+        return name;
+        }
+
+    }

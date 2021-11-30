@@ -17,6 +17,8 @@ Pasos aconsellats per al Bernat:
     1-Definir les heuristiques
     2-Implementarles
     3-Testejar amb diferents casos 
+    -----------------------------------------------
+    Hacer dos bucles-> 1 para recorrer las fichas y otro para recorrer l'array
 
 Sentido de exploracion:
     i -> fila
