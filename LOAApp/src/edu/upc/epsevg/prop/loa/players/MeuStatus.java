@@ -5,10 +5,20 @@
  */
 package edu.upc.epsevg.prop.loa.players;
 
+import edu.upc.epsevg.prop.loa.GameStatus;
+
 /**
- *
+ * Es com si estiguesim en la classe de GameStautus pero realment no hi estem, és com un parasit
  * @author Usuario
  */
-public class MeuStatus {
+public class MeuStatus extends GameStatus {
     
+    public MeuStatus(int [][] tauler){
+        super(tauler);
+    }
+    
+    public MeuStatus(GameStatus gs){
+        super(gs);
+    }
+    //FER UN GET HAURISTICA ACÁ
 }
