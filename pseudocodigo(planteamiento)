@@ -12,6 +12,7 @@ Heuristicas:
 Contar la distancia que estamos del mayor grupo de fichas
 Contar la cantidad de grupos que tenemos
 Priorizar hacer el grupo en el centro del tablero
+Si haces que que te coman todas las piezas ganamos
 
 Pasos aconsellats per al Bernat:
     1-Definir les heuristiques

@@ -147,5 +147,47 @@ public class NotCheckers implements IPlayer, IAuto {
     public String getName() {
         return name;
     }
+    
+    public int Agrupadas (GameStatus gs, CellType color, int fila, int col) {
+        int direccion = 1; //indica en la direccion que estamos explorando
+        int contFichas = 1; //cuenta la cantidad de ficha agrupadas que tenemos
+        int FichasTablero = gs.getNumberOfPiecesPerColor(color); //como inicia la fichas que hay en el tablero
+        int filAux = fila;
+        int colAux = col;
+        CellType colorRival = color.opposite(color); //color del contrario -*-=+
+        
+        while(direccion<8 && contFichas<FichasTablero) { //mientras no hayamos hecho la vuelta del reloj y no hayamos llegado al total de fichas que tenemos de un solo color en el tablero
+            gs.validateCordinates(filAux, colAux); // validar si la posicion es correcta
+            if (direccion == 1) { //exploramos en vertical [i+1,j]
+                 gs.validateCordinates(filAux+1, colAux);
+                 if (gs.getPos(filAux+1,colAux) == color) { //si nos encontramos una ficha de nuestro color
+                    contFichas++;
+                    filAux++;
+                 }
+                 else if (gs.getPos(filAux+1,colAux) == colorRival ) { //si encontramos la ficha del rival cambiamos la direccion de exploracion
+                     direccion++; 
+                 }
+                 else if (gs.getPos(filAux+1,colAux) == CellType.EMPTY) { //si encontramos una casilla blanca cambiamos la direccion de exploracion
+                     direccion++;
+                 }
+            }
+            if (direccion == 2) { //exploramos la diagonal derecha arriba [i+1,j+1]
+                gs.validateCordinates(filAux+1, colAux+1);
+                if (gs.getPos(filAux+1,colAux+1) == color) { //si nos encontramos una ficha de nuestro color
+                    contFichas++;
+                    filAux++;
+                    colAux++;
+                 }
+                 else if (gs.getPos(filAux+1,colAux+1) == colorRival ) { //si encontramos la ficha del rival cambiamos la direccion de exploracion
+                     direccion++; 
+                 }
+                 else if (gs.getPos(filAux+1,colAux+1) == CellType.EMPTY) { //si encontramos una casilla blanca cambiamos la direccion de exploracion
+                     direccion++;
+                 }
+            }
+        }
+        
+        return contFichas;
+    }
 
 }
