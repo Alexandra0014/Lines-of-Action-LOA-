@@ -78,7 +78,7 @@ public class NotCheckers implements IPlayer, IAuto {
 
         } else if (profunditat == 0) {
             //return heuristica(t, color * -1);
-            return Nagrupadas(gs, color);
+            return heuristica(gs, color);
 
         } else {
             valor = infpos;
@@ -113,7 +113,7 @@ public class NotCheckers implements IPlayer, IAuto {
 
         } else if (profunditat == 0) {
             //return heuristica(t, color);
-            return Nagrupadas(gs, color);
+            return heuristica(gs, color);
 
         } else {
             valor = infneg;
@@ -156,15 +156,33 @@ public class NotCheckers implements IPlayer, IAuto {
 
         return posicion;
     }
-
+    public int heuristica (GameStatus gs, CellType color) {
+        int rival = 0;
+        int nuestras = 0;
+        CellType colorRival = color.opposite(color); 
+        rival = Nagrupadas(gs,colorRival);
+        nuestras = Nagrupadas(gs,color);
+        
+        return nuestras - rival;
+    }
+    
     public int Nagrupadas(GameStatus gs, CellType color) {   //numero de fitxes afrupades al tauler
         int nºagrupades = 0;
+        int FichasTablero = gs.getNumberOfPiecesPerColor(color);
+        int contador[] = new int[11];
         for (int i = 0; i < gs.getSize(); i++) {
             for (int j = 0; j < gs.getSize(); j++) {
-                nºagrupades = Agrupadas(gs, color, i, j);
+                if (gs.getPos(i,j) == color) {
+                   nºagrupades = Agrupadas(gs, color, i, j);
+                   
+                   if (nºagrupades>0 && nºagrupades<FichasTablero) {
+                       contador[nºagrupades-1]++;
+                   }
+                }
+                
             }
         }
-        return nºagrupades;
+        return contador[0] * 5 + contador[1] * 15 + contador[2] * 25 + contador[3] * 35 + contador[4] * 45 + contador[5] * 55 + contador[6] * 65 + contador[7] * 75 + contador[8] * 85 + contador[9] * 95 + contador[10] * 105;
     }
 
     public int Agrupadas(GameStatus gs, CellType color, int fila, int col) {
@@ -192,6 +210,8 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
             }
             if (direccion == 2) { //exploramos la diagonal derecha arriba [i+1,j+1]
+                filAux = fila;
+                colAux = col;
                 if (ComprobarPosicion(gs, filAux + 1, colAux + 1)) {
                     if (gs.getPos(filAux + 1, colAux + 1) == color) { //si nos encontramos una ficha de nuestro color
                         contFichas++;
@@ -208,6 +228,8 @@ public class NotCheckers implements IPlayer, IAuto {
 
             }
             if (direccion == 3) { //exploramos la diagonal derecha arriba [i,j+1]
+                colAux = col;
+                filAux = fila;
                 if (ComprobarPosicion(gs, filAux, colAux + 1)) {
                     if (gs.getPos(filAux, colAux + 1) == color) { //si nos encontramos una ficha de nuestro color
                         contFichas++;
@@ -223,6 +245,8 @@ public class NotCheckers implements IPlayer, IAuto {
 
             }
             if (direccion == 4) { //exploramos la diagonal derecha arriba [i-1,j+1]
+                colAux = col;
+                filAux = fila;
                 if (ComprobarPosicion(gs, filAux - 1, colAux + 1)) {
                     if (gs.getPos(filAux - 1, colAux + 1) == color) { //si nos encontramos una ficha de nuestro color
                         contFichas++;
@@ -239,6 +263,8 @@ public class NotCheckers implements IPlayer, IAuto {
 
             }
             if (direccion == 5) { //exploramos la diagonal derecha arriba [i-1,j]
+                colAux = col;
+                filAux = fila;
                 if (ComprobarPosicion(gs, filAux - 1, colAux)) {
                     if (gs.getPos(filAux - 1, colAux) == color) { //si nos encontramos una ficha de nuestro color
                         contFichas++;
@@ -254,6 +280,8 @@ public class NotCheckers implements IPlayer, IAuto {
 
             }
             if (direccion == 6) { //exploramos la diagonal derecha arriba [i-1,j-1]
+                colAux = col;
+                filAux = fila;
                 if (ComprobarPosicion(gs, filAux - 1, colAux - 1)) {
                     if (gs.getPos(filAux - 1, colAux - 1) == color) { //si nos encontramos una ficha de nuestro color
                         contFichas++;
@@ -270,6 +298,8 @@ public class NotCheckers implements IPlayer, IAuto {
 
             }
             if (direccion == 7) { //exploramos la diagonal derecha arriba [i,j-1]
+                colAux = col;
+                filAux = fila;
                 if (ComprobarPosicion(gs, filAux, colAux - 1)) {
                     if (gs.getPos(filAux, colAux - 1) == color) { //si nos encontramos una ficha de nuestro color
                         contFichas++;
@@ -285,6 +315,8 @@ public class NotCheckers implements IPlayer, IAuto {
 
             }
             if (direccion == 8) { //exploramos la diagonal derecha arriba [i+1,j-1]
+                colAux = col;
+                filAux = fila; 
                 if (ComprobarPosicion(gs, filAux + 1, colAux - 1)) {
                     if (gs.getPos(filAux + 1, colAux - 1) == color) { //si nos encontramos una ficha de nuestro color
                         contFichas++;
