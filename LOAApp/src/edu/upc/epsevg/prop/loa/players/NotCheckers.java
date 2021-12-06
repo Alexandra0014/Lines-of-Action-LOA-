@@ -47,6 +47,7 @@ public class NotCheckers implements IPlayer, IAuto {
         int profunditat = prof;
         Point PosFrom = new Point(0, 0);
         Point PosTo = new Point(0, 0);
+        Move movi = new Move(PosFrom,PosTo,0,0,SearchType.MINIMAX);
 
         for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
             PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
@@ -61,11 +62,12 @@ public class NotCheckers implements IPlayer, IAuto {
                     if (valor <= heu) {
                         millorMov = mov;
                         valor = heu;
+                        movi = new Move(PosFrom, PosTo, 0, 0, SearchType.MINIMAX);
                     }
                 }
             }
         }
-        return new Move(PosFrom, PosTo, 0, 0, SearchType.MINIMAX);
+        return movi;
     }
 
     public int min_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat, int col) {
@@ -77,8 +79,8 @@ public class NotCheckers implements IPlayer, IAuto {
             return infpos;
 
         } else if (profunditat == 0) {
-            //return heuristica(t, color * -1);
-            return heuristica(gs, color);
+            return Nagrupadas(gs,color);
+            //return heuristica(gs, color);
 
         } else {
             valor = infpos;
@@ -112,8 +114,8 @@ public class NotCheckers implements IPlayer, IAuto {
             return infneg;
 
         } else if (profunditat == 0) {
-            //return heuristica(t, color);
-            return heuristica(gs, color);
+            return Nagrupadas(gs,color);
+            //return heuristica(gs, color);
 
         } else {
             valor = infneg;
@@ -183,6 +185,7 @@ public class NotCheckers implements IPlayer, IAuto {
             }
         }
         return contador[0] * 5 + contador[1] * 15 + contador[2] * 25 + contador[3] * 35 + contador[4] * 45 + contador[5] * 55 + contador[6] * 65 + contador[7] * 75 + contador[8] * 85 + contador[9] * 95 + contador[10] * 105;
+        //return nºagrupades;
     }
 
     public int Agrupadas(GameStatus gs, CellType color, int fila, int col) {
