@@ -230,7 +230,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
 
             }
-            if (direccion == 3) { //exploramos la diagonal derecha arriba [i,j+1]
+            if (direccion == 3) { //exploramos la horizontal derecha [i,j+1]
                 colAux = col;
                 filAux = fila;
                 if (ComprobarPosicion(gs, filAux, colAux + 1)) {
@@ -247,7 +247,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
 
             }
-            if (direccion == 4) { //exploramos la diagonal derecha arriba [i-1,j+1]
+            if (direccion == 4) { //exploramos la diagonal derecha abajo [i-1,j+1]
                 colAux = col;
                 filAux = fila;
                 if (ComprobarPosicion(gs, filAux - 1, colAux + 1)) {
@@ -265,7 +265,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
 
             }
-            if (direccion == 5) { //exploramos la diagonal derecha arriba [i-1,j]
+            if (direccion == 5) { //exploramos la vertical abajo [i-1,j]
                 colAux = col;
                 filAux = fila;
                 if (ComprobarPosicion(gs, filAux - 1, colAux)) {
@@ -282,7 +282,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
 
             }
-            if (direccion == 6) { //exploramos la diagonal derecha arriba [i-1,j-1]
+            if (direccion == 6) { //exploramos la diagonal izquierda abajo [i-1,j-1]
                 colAux = col;
                 filAux = fila;
                 if (ComprobarPosicion(gs, filAux - 1, colAux - 1)) {
@@ -300,7 +300,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
 
             }
-            if (direccion == 7) { //exploramos la diagonal derecha arriba [i,j-1]
+            if (direccion == 7) { //exploramos la horizontal izquierda [i,j-1]
                 colAux = col;
                 filAux = fila;
                 if (ComprobarPosicion(gs, filAux, colAux - 1)) {
@@ -317,7 +317,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
 
             }
-            if (direccion == 8) { //exploramos la diagonal derecha arriba [i+1,j-1]
+            if (direccion == 8) { //exploramos la diagonal izquierda arriba [i+1,j-1]
                 colAux = col;
                 filAux = fila; 
                 if (ComprobarPosicion(gs, filAux + 1, colAux - 1)) {
