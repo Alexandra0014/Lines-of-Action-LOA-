@@ -58,7 +58,7 @@ public class NotCheckers implements IPlayer, IAuto {
                     GameStatus aux = new GameStatus(gs);
                     aux.movePiece(PosFrom, PosTo);
                     CellType colorRival = color.opposite(color);
-                    heu = min_Valor(aux, colorRival, alfa, beta, profunditat - 1, mov);
+                    heu = min_Valor(aux, colorRival, alfa, beta, profunditat - 1);
                     if (valor <= heu) {
                         millorMov = mov;
                         valor = heu;
@@ -70,7 +70,7 @@ public class NotCheckers implements IPlayer, IAuto {
         return movi;
     }
 
-    public int min_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat, int col) {
+    public int min_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat) {
         CellType colorRival = color.opposite(color); //color del contrario -*-=+
         int valor = 0;
         cont++;
@@ -96,7 +96,7 @@ public class NotCheckers implements IPlayer, IAuto {
                         GameStatus aux2 = new GameStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
                         //CellType colorRival = color.opposite(color); //color del contrario -*-=+
-                        valor = Integer.min(valor, max_Valor(aux2, colorRival, alfa, beta, profunditat - 1, mov));
+                        valor = Integer.min(valor, max_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
                         beta = Integer.min(valor, beta);
                         if (beta <= alfa) {
                             return valor;
@@ -108,7 +108,7 @@ public class NotCheckers implements IPlayer, IAuto {
         return valor;
     }
 
-    public int max_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat, int col) {
+    public int max_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat) {
         CellType colorRival = color.opposite(color); //color del contrario -*-=+
         int valor = 0;
         cont++;
@@ -133,7 +133,7 @@ public class NotCheckers implements IPlayer, IAuto {
                         GameStatus aux2 = new GameStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
                         //CellType colorRival = color.opposite(color); //color del contrario -*-=+
-                        valor = Integer.max(valor, min_Valor(aux2, colorRival, alfa, beta, profunditat - 1, mov));
+                        valor = Integer.max(valor, min_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
                         alfa = Integer.max(valor, alfa);
                         if (beta <= alfa) {
                             return valor;
@@ -165,6 +165,7 @@ public class NotCheckers implements IPlayer, IAuto {
     }
 
     public int heuristica(GameStatus gs, CellType color) {
+        /*
         int rival = 0;
         int nuestras = 0;
         CellType colorRival = color.opposite(color);
@@ -172,12 +173,12 @@ public class NotCheckers implements IPlayer, IAuto {
         nuestras = Nagrupadas(gs, color);
 
         return nuestras - rival;
-
-        /*
-        int n = gs.getEmptyCellsCount();
+*/
+        
+        int n = 10000;
         Random rand = new Random();
         int p = rand.nextInt(n) + 1;//de 1 a n
-        return p;*/
+        return p;
     }
 
     public int Nagrupadas(GameStatus gs, CellType color) {   //numero de fitxes afrupades al tauler
