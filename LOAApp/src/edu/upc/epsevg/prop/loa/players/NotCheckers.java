@@ -11,6 +11,7 @@ import edu.upc.epsevg.prop.loa.IAuto;
 import edu.upc.epsevg.prop.loa.IPlayer;
 import edu.upc.epsevg.prop.loa.Move;
 import edu.upc.epsevg.prop.loa.SearchType;
+import java.awt.List;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
@@ -29,6 +30,7 @@ public class NotCheckers implements IPlayer, IAuto {
     int infneg = -99999999;    //-inf
     int infpos = 99999999;     // +inf
     int cont = 0;             //contador dels nodes explorats (OJO HAY UNA FUNCIÓN EN Move que te lo dice)
+    ArrayList<Point> posiciones;
 
 //-------------------------------
     public NotCheckers(String name, int profunditat) {
@@ -41,6 +43,7 @@ public class NotCheckers implements IPlayer, IAuto {
         int valor = infneg;
         int alfa = infneg;
         int beta = infpos;
+        posiciones = new ArrayList<Point>();
         int millorMov = 0;  //Millor pos. on es possarà les fitxes
         int heu = 0;        //Resultat de l'heuristica
         CellType color = gs.getCurrentPlayer();
@@ -67,6 +70,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 }
             }
         }
+        System.out.println("mensaje" + heuristica(gs, color));
         return movi;
     }
 
@@ -165,7 +169,7 @@ public class NotCheckers implements IPlayer, IAuto {
     }
 
     public int heuristica(GameStatus gs, CellType color) {
-        /*
+        
         int rival = 0;
         int nuestras = 0;
         CellType colorRival = color.opposite(color);
@@ -173,30 +177,38 @@ public class NotCheckers implements IPlayer, IAuto {
         nuestras = Nagrupadas(gs, color);
 
         return nuestras - rival;
-*/
-        
+         
+
+        /*
         int n = 10000;
         Random rand = new Random();
         int p = rand.nextInt(n) + 1;//de 1 a n
         return p;
+        */
+
+        
     }
 
     public int Nagrupadas(GameStatus gs, CellType color) {   //numero de fitxes afrupades al tauler
         int nºagrupades = 0;
         int FichasTablero = gs.getNumberOfPiecesPerColor(color);
-        int contador[] = new int[11];
-        for (int i = 0; i < gs.getSize(); i++) {
-            for (int j = 0; j < gs.getSize(); j++) {
-                if (gs.getPos(i, j) == color) {
-                    nºagrupades = Agrupadas(gs, color, i, j);
-
-                    if (nºagrupades > 0 && nºagrupades < FichasTablero) {
-                        contador[nºagrupades - 1]++;
-                    }
-                }
-
-            }
+        int contador[] = new int[12];
+        ArrayList<Point> Num_agrupadas = new ArrayList<Point>();
+        for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
+            Point Pos = gs.getPiece(color, i);
+            Num_agrupadas.add(Pos);
         }
+        for (Point Pos : Num_agrupadas){
+            posiciones.clear();
+            Agrupadas_v2(gs, color, Pos.x, Pos.y);
+            contador[posiciones.size()]++;
+            //for (Point Pos2 : posiciones){
+           //     System.out.println("elementops" + Pos2.x + "/" + Pos.y);
+            //}
+            //System.out.println("--------------------------------");
+            //max = Math.max(max, posiciones.size());
+        }
+
         return contador[0] * 5 + contador[1] * 15 + contador[2] * 25 + contador[3] * 35 + contador[4] * 45 + contador[5] * 55 + contador[6] * 65 + contador[7] * 75 + contador[8] * 85 + contador[9] * 95 + contador[10] * 105;
         //return nºagrupades;
     }
@@ -352,6 +364,34 @@ public class NotCheckers implements IPlayer, IAuto {
         }
         //System.out.println("contFichas: " + contFichas);
         return contFichas;
+    }
+
+//////////////////////////////////////////////////////
+    public void Agrupadas_v2(GameStatus gs, CellType color, int fila, int col) {
+        int filAux = fila;
+        int colAux = col;
+        CellType colorRival = color.opposite(color); //color del contrario -*-=+
+        Point PosicionActual = new Point(filAux, colAux);
+        if (gs.getPos(filAux, colAux) == colorRival) { //si encontramos la ficha del rival cambiamos la direccion de exploracion
+            return;
+        } else if (gs.getPos(filAux, colAux) == CellType.EMPTY) { //si encontramos una casilla blanca cambiamos la direccion de exploracion
+            return;
+        } else if (posiciones.contains(PosicionActual)) {
+            return;
+        } else {
+            /*introducir fil, col a las posiciones*/
+            posiciones.add(PosicionActual);
+            for (int i = -1; i < 1; i++) {
+                for (int j = -1; j < 1; j++) {
+                    if (!(i == 0 && j == 0)) {
+                        if (ComprobarPosicion(gs, filAux + i, colAux + j)) {
+                            Agrupadas_v2(gs, color, filAux + i, colAux + j);
+                        }
+                    }
+                }
+            }
+        }
+        /*devuelve una lista*/
     }
 
 }
