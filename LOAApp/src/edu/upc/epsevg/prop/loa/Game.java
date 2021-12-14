@@ -26,7 +26,8 @@ public class Game {
                 IPlayer player1 = new NotCheckers("NotCheckers",4);
 
                 //IPlayer player2 = new RandomPlayer("Crazy Chris");
-                IPlayer player2 = new RandomPlayer("Crazy Ivan");
+                //IPlayer player2 = new RandomPlayer("Crazy Ivan");
+                 IPlayer player2 = new MCCloudPlayer();
 
                 new Board(player1, player2, 4, Level.DIFFICULT);
             }

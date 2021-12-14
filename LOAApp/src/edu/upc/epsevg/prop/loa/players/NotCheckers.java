@@ -65,7 +65,7 @@ public class NotCheckers implements IPlayer, IAuto {
                     if (valor <= heu) {
                         millorMov = mov;
                         valor = heu;
-                        movi = new Move(PosFrom, PosTo, 0, 0, SearchType.MINIMAX);
+                        movi = new Move(PosFrom, PosTo, cont, profunditat, SearchType.MINIMAX);
                     }
                 }
             }
