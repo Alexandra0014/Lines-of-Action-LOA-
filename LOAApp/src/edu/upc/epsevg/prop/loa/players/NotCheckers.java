@@ -51,27 +51,35 @@ public class NotCheckers implements IPlayer, IAuto {
         Point PosFrom = new Point(0, 0);
         Point PosTo = new Point(0, 0);
         Move movi = new Move(PosFrom, PosTo, 0, 0, SearchType.MINIMAX);
-
-        for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
-            PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
-            ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
-            if (!points.isEmpty()) { //si nos podemos mover
-                for (int mov = 0; mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
-                    PosTo = points.get(mov); //Obtenemos una posicion de destino
-                    GameStatus aux = new GameStatus(gs);
-                    aux.movePiece(PosFrom, PosTo);
-                    CellType colorRival = color.opposite(color);
-                    heu = min_Valor(aux, colorRival, alfa, beta, profunditat - 1);
-                    if (valor <= heu) {
-                        millorMov = mov;
-                        valor = heu;
-                        movi = new Move(PosFrom, PosTo, cont, profunditat, SearchType.MINIMAX);
+        Move auxMovi = new Move(PosFrom, PosTo, 0, 0, SearchType.MINIMAX);
+        for (int depth = 0; (!TimeOut) && depth<prof ; depth+=2) {
+            for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
+                //if(TimeOut) break;
+                PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
+                ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
+                if (!points.isEmpty()) { //si nos podemos mover
+                    for (int mov = 0; mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
+                        PosTo = points.get(mov); //Obtenemos una posicion de destino
+                        GameStatus aux = new GameStatus(gs);
+                        aux.movePiece(PosFrom, PosTo);
+                        CellType colorRival = color.opposite(color);
+                        heu = min_Valor(aux, colorRival, alfa, beta, profunditat - 1);
+                        if(TimeOut) break;
+                        if (valor <= heu) {
+                            millorMov = mov;
+                            valor = heu;
+                            movi = new Move(PosFrom, PosTo, cont, profunditat, SearchType.MINIMAX);
+                        }
                     }
                 }
             }
+            if (!TimeOut) {
+                auxMovi = movi;
+            }
         }
+        System.out.println("AuxMovi: "+auxMovi.getFrom()+""+auxMovi.getTo());
         //System.out.println("mensaje" + heuristica(gs, color));
-        return movi;
+        return auxMovi;
     }
 
     public int min_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat) {
@@ -80,8 +88,10 @@ public class NotCheckers implements IPlayer, IAuto {
         cont++;
         Point PosFrom = new Point(0, 0);
         Point PosTo = new Point(0, 0);
+        //if (TimeOut) return 6;
         if (gs.isGameOver()) {
             if (gs.GetWinner() == colorRival) {
+                TimeOut = true;
                 return infpos;
             }
 
@@ -98,6 +108,7 @@ public class NotCheckers implements IPlayer, IAuto {
                         PosTo = points.get(mov); //Obtenemos una posicion de destino
                         GameStatus aux2 = new GameStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
+                        //if (TimeOut) return 6;
                         valor = Integer.min(valor, max_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
                         beta = Integer.min(valor, beta);
                         if (beta <= alfa) {
@@ -116,9 +127,11 @@ public class NotCheckers implements IPlayer, IAuto {
         cont++;
         Point PosFrom = new Point(0, 0);
         Point PosTo = new Point(0, 0);
+        //if (TimeOut) return 6;
         if (gs.isGameOver()) {
             if (gs.GetWinner() == colorRival) {
-                return infneg;
+                TimeOut = true;
+                return infneg;  
             }
         } else if (profunditat == 0) {
             return heuristica(gs, color);
@@ -133,6 +146,7 @@ public class NotCheckers implements IPlayer, IAuto {
                         PosTo = points.get(mov); //Obtenemos una posicion de destino
                         GameStatus aux2 = new GameStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
+                        //if (TimeOut) return 6;
                         valor = Integer.max(valor, min_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
                         alfa = Integer.max(valor, alfa);
                         if (beta <= alfa) {
@@ -144,7 +158,7 @@ public class NotCheckers implements IPlayer, IAuto {
         }
         return valor;
     }
-
+    
     @Override
     public void timeout() {
         TimeOut = true;
@@ -177,7 +191,6 @@ public class NotCheckers implements IPlayer, IAuto {
     }
 
     public int Nagrupadas(GameStatus gs, CellType color) {   //numero de fitxes afrupades al tauler
-        int nºagrupades = 0;
         int FichasTablero = gs.getNumberOfPiecesPerColor(color);
         int contador[] = new int[12];
         int medio = 0;
@@ -230,7 +243,7 @@ public class NotCheckers implements IPlayer, IAuto {
             peso = 10;
         } else if (X >= 1 && X <= 6 && Y >= 1 && Y <= 6 && !(X >= 2 && X <= 5 && Y >= 2 && Y <= 5)) { //Zona AZUL - MEDIO
             peso = 3;
-        } else {
+        } else {        //ZONA VERDE - EXTERIOR
             peso = 1;
         }
         return peso;
