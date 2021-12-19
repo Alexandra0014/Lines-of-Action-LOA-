@@ -221,6 +221,8 @@ public class NotCheckers implements IPlayer, IAuto {
         for (Point Pos : Num_agrupadas) {
             posiciones.clear();
             Agrupadas(gs, color, Pos.x, Pos.y);
+            //System.out.println("elem: "+posiciones);
+            //System.out.println("Posicion: "+Pos);
             medio = Enmedio(Pos);
             contador[posiciones.size()] += medio;
         }
@@ -233,19 +235,26 @@ public class NotCheckers implements IPlayer, IAuto {
         int colAux = col;
         CellType colorRival = color.opposite(color); //color del contrario -*-=+
         Point PosicionActual = new Point(filAux, colAux);
+        //System.out.println("principio");
         if (gs.getPos(filAux, colAux) == colorRival) { //si encontramos la ficha del rival cambiamos la direccion de exploracion
+            //System.out.println("primer if");
             return;
         } else if (gs.getPos(filAux, colAux) == CellType.EMPTY) { //si encontramos una casilla blanca cambiamos la direccion de exploracion
+            //System.out.println("segundo if");
             return;
         } else if (posiciones.contains(PosicionActual)) {
+            //System.out.println("tercer if");
             return;
         } else {
             /*introducir fil, col a las posiciones*/
             posiciones.add(PosicionActual);
-            for (int i = -1; i < 1; i++) {
-                for (int j = -1; j < 1; j++) {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    //System.out.println("dentro del for: "+i+" "+j);
                     if (!(i == 0 && j == 0)) {
+                        //System.out.println("antes del if: "+(filAux + i)+" "+(colAux + j));
                         if (ComprobarPosicion(gs, filAux + i, colAux + j)) {
+                            //System.out.println("añadiendo: "+(filAux + i)+" "+(colAux + j));
                             Agrupadas(gs, color, filAux + i, colAux + j);
                         }
                     }
@@ -262,7 +271,8 @@ public class NotCheckers implements IPlayer, IAuto {
             peso = 10;
         } else if (X >= 1 && X <= 6 && Y >= 1 && Y <= 6 && !(X >= 2 && X <= 5 && Y >= 2 && Y <= 5)) { //Zona AZUL - MEDIO
             peso = 3;
-        } else {        //ZONA VERDE - EXTERIOR
+        } 
+        else {        //ZONA VERDE - EXTERIOR
             peso = 1;
         }
         return peso;
