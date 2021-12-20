@@ -82,7 +82,7 @@ public class NotCheckers implements IPlayer, IAuto {
                     }
                 }
             }
-            if (!TimeOut || TimeOutWinners) {
+            if (!TimeOut || TimeOutWinners) {   //NO MIRES ATRAS TU PA' LANTE (si vas a ganar claro, sino mira pa' tras)
                 FinalBestPosFrom = BestPosFrom;
                 FinalBestPosTo = BestPosTo;
             }
