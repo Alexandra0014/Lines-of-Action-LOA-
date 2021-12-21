@@ -1,0 +1,37 @@
+Zobrist teoria:
+	- Añadir dos valores random a cada casilla uno para las blancas y otro para las negras
+	- Hacer una tabla hash y inicializarla a 0
+	- Por cada pieza que nos encontremos miramos en que posicion esta, y de que color es
+		- Una vez sabemos la posicion, cogemos el valor de su casilla correspondiente al color y hacemos la XOR con el valor de la hash
+		- Vamos actualizando el valor de la hash con el ultimo resultado de la XOR
+
+
+Implementacion: 
+	- En la clase MeuGameStatus
+		- Cuando traemos la clase GameStatus a el MeuGameStatus es cuando incializamos la hash
+			- Hacemos la hash = 0
+
+		- Funcion void setValorRandomCasillas(tablero)
+
+		- Funcion int getValorRandomCasillas(tablero, posicion, color)
+			- obtenemos el valor de la casilla segun el color
+
+		- Funcion int getHash()
+			-obtenemos el valor de la hash
+
+		- Funcion void actualizarHash(hash, tablero, posicion, color)
+			- calculo de la XOR 
+				- obtenemos el valor getHash() 
+				- obtenemos el valor getValorRandomCasillas()
+			- guardamos el valor en la hash
+
+		- Funcion Move movePiece(tablero)
+		 	funcion movePiece {
+		 		actualizar por cada movimiento que se hace (si la posicion a la que vamos esta vacia seran 2 movimientos (una XOR para la posicion origen y otra para la posicion destino), si hay una pieza contraria seran 3 (una XOR para la posicion origen y tu color, otra para la posicion destino y el color del destino y otra para quitar la pieza del rival(XOR de la posicion destino con tu color)))
+
+				actualizarHash()
+				move() -> funcion de NotCheckers
+			}
+
+
+	- En la clase NotChekers	
