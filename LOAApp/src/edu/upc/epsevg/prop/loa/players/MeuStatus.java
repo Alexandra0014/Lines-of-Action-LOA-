@@ -7,6 +7,7 @@ package edu.upc.epsevg.prop.loa.players;
 
 import edu.upc.epsevg.prop.loa.CellType;
 import edu.upc.epsevg.prop.loa.GameStatus;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -16,11 +17,7 @@ import java.util.Random;
  *
  * @author Usuario
  */
-public class MeuStatus extends GameStatus {
-
-    int matrix[][][] = new int[8][8][2];
-    
-    GameStatus gs2 = new GameStatus(matrix);
+public class MeuStatus extends GameStatus { 
 
     public MeuStatus(int[][] tauler) {
         super(tauler);
@@ -29,7 +26,11 @@ public class MeuStatus extends GameStatus {
     public MeuStatus(GameStatus gs) {
         super(gs);
     }
-
+    //Globals
+    static long ZobristTable[][][] = new long [8][8][2]; //[X][Y][color]
+    
+    
+    
     //FER UN GET HAURISTICA ACÁ
     public int getHeuristica(GameStatus gs) {
         CellType color = gs.getCurrentPlayer();
@@ -38,7 +39,7 @@ public class MeuStatus extends GameStatus {
         int h = NC.heuristica(gs, color);
         return h;
     }
-
+/*
     public void setValorRandomCasillas(GameStatus gs, CellType color) {
 
         CellType ColorContrario = color.opposite(color);
@@ -58,4 +59,54 @@ public class MeuStatus extends GameStatus {
             }
         }
     }
+ */ 
+    //Generador random pot generar tamb negatius
+    public static long randomValue(){
+        SecureRandom random = new SecureRandom();
+        return random.nextLong();
+    }
+
+    //Inicializador de taula
+    public void setValorRandomCasillas(){
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                for(int piece = 0; piece < 2; piece++){
+                    ZobristTable[i][j][piece] = randomValue();
+                    System.out.println("i: "+i + "j: "+j + "valores:" +ZobristTable[i][j][piece]);
+                }
+            }
+        }
+    }
+
+    //Calcula el valor hash d'un tauler donat (ho de XOR)
+    public long calculHash(MeuStatus ms){
+        long hashKey = 0; //[X][Y][color]
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                CellType pos = ms.getPos(i, j);
+                if(pos!= CellType.EMPTY){
+                    CellType piece = ms.getCurrentPlayer();
+                    hashKey ^= ZobristTable[i][j][piece.toColor01(piece)];
+                } 
+            }
+        }
+        return hashKey;
+    }
+    
+    public long actualitza(MeuStatus ms,NotCheckers nc){
+        long act = 0;
+        
+    }
+    int main(){
+        setValorRandomCasillas();
+        
+        return 0;
+    }
+
+
+
+
+
+
 }
+

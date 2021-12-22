@@ -11,6 +11,7 @@ import edu.upc.epsevg.prop.loa.IAuto;
 import edu.upc.epsevg.prop.loa.IPlayer;
 import edu.upc.epsevg.prop.loa.Move;
 import edu.upc.epsevg.prop.loa.SearchType;
+import edu.upc.epsevg.prop.loa.players.MeuStatus;
 import java.awt.List;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class NotCheckers implements IPlayer, IAuto {
     int infpos = 99999999;     // +inf
     int cont = 0;             //contador dels nodes explorats (OJO HAY UNA FUNCIÓN EN Move que te lo dice)
     ArrayList<Point> posiciones;
+    
 
 //-------------------------------
     public NotCheckers(String name, int profunditat) {
@@ -277,5 +279,7 @@ public class NotCheckers implements IPlayer, IAuto {
         }
         return peso;
     }
+    
+
 
 }
