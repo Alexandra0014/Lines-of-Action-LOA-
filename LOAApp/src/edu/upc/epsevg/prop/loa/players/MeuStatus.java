@@ -93,10 +93,10 @@ public class MeuStatus extends GameStatus {
         return hashKey;
     }
     
-    public long actualitza(MeuStatus ms,NotCheckers nc){
+    /*public long actualitza(MeuStatus ms,NotCheckers nc){
         long act = 0;
         
-    }
+    }*/
     int main(){
         setValorRandomCasillas();
         
