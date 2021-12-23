@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
- * @author aibar
+ * Jugador NotCheckers 
+ * @author Omara Aibar i Alexandra Espinosa
  */
 public class NotCheckers implements IPlayer, IAuto {
 
@@ -36,11 +36,26 @@ public class NotCheckers implements IPlayer, IAuto {
     
 
 //-------------------------------
-    public NotCheckers(String name, int profunditat) {
+    
+    /**
+     * Constructor on inicialitzem el nom i la profunditat que ens passen per paràmetre
+     * 
+     * @param name Nom del nostre jugador NotCheckers
+     * @param profunditat - Profunditat màxima de l'arbre.
+     */
+    public NotCheckers (String name, int profunditat) {
         this.name = name;
         prof = profunditat;
     }
 
+    /**
+     * Funció per determinar el millor moviment amb l'Algoritme MiniMax IDS, donat un tauler passat per paràmetre, la posició on volem 
+     * anar, la inicial i la profunditat.
+     * 
+     * @param gs Tauler on es farà el millor moviment donat
+     * 
+     * @return movi - Millor moviment segons l'algoritme MiniMax IDS
+     */
     @Override
     public Move move(GameStatus gs) {
         cont = 0;
@@ -51,8 +66,8 @@ public class NotCheckers implements IPlayer, IAuto {
         TimeOutWinners = false;
         posiciones = new ArrayList<Point>();
         int maxDepth = 0;
-        int millorMov = 0;  //Millor pos. on es possarà les fitxes
-        int heu = 0;        //Resultat de l'heuristica
+        int millorMov = 0;                                                      //Millor pos. on es possarà les fitxes
+        int heu = 0;                                                            //Resultat de l'heuristica
         CellType color = gs.getCurrentPlayer();
         //int profunditat = prof;
         Point PosFrom = new Point(0, 0);
@@ -65,12 +80,12 @@ public class NotCheckers implements IPlayer, IAuto {
         Move auxMovi = new Move(PosFrom, PosTo, 0, 0, SearchType.MINIMAX_IDS);
         for (int depth = 1; (!TimeOut) && depth <= prof; depth++) {
             maxDepth = depth;
-            for (int i = 0; (!TimeOut) && i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
-                PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
-                ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
-                if ((!TimeOut) && !points.isEmpty()) { //si nos podemos mover
-                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
-                        PosTo = points.get(mov); //Obtenemos una posicion de destino
+            for (int i = 0; (!TimeOut) && i < gs.getNumberOfPiecesPerColor(color); i++) { //Recorrem les peces del tauler
+                PosFrom = gs.getPiece(color, i);                                //Obtenim la posició de cada peça
+                ArrayList<Point> points = gs.getMoves(PosFrom);                 //Llista de posicions a les que ens podem moure
+                if ((!TimeOut) && !points.isEmpty()) {                          //Si ens podem moure
+                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //Recorrem la llista de moviments possibles per cada peça
+                        PosTo = points.get(mov);                                //Obtenim una posició de destí
                         GameStatus aux = new GameStatus(gs);
                         aux.movePiece(PosFrom, PosTo);
                         CellType colorRival = color.opposite(color);
@@ -84,7 +99,7 @@ public class NotCheckers implements IPlayer, IAuto {
                     }
                 }
             }
-            if (!TimeOut || TimeOutWinners) {   //NO MIRES ATRAS TU PA' LANTE (si vas a ganar claro, sino mira pa' tras)
+            if (!TimeOut || TimeOutWinners) {                                   //En el cas que hi hagui una última jugada per guanyar, no mirar l'última pos. (en cas contrari si s'ha de mirar la pos. anterior)
                 FinalBestPosFrom = BestPosFrom;
                 FinalBestPosTo = BestPosTo;
             }
@@ -97,8 +112,19 @@ public class NotCheckers implements IPlayer, IAuto {
         return movi;
     }
 
+    /**
+     * Funció per determinar el valor mínim de l'heuristica dels moviments segons l'algoritme MiniMax IDS
+     * 
+     * @param gs  Tauler del joc
+     * @param color  color del ejugador actual
+     * @param alfa  Valor màxim
+     * @param beta  Valor mínim
+     * @param profunditat  Profunditat de l'arbre
+     * 
+     * @return valor - Valor de la heuristica mínima
+     */
     public int min_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat) {
-        CellType colorRival = color.opposite(color); //color del contrario -*-=+
+        CellType colorRival = color.opposite(color);                            //color de l'oponent
         int valor = 0;
         cont++;
         Point PosFrom = new Point(0, 0);
@@ -118,12 +144,12 @@ public class NotCheckers implements IPlayer, IAuto {
 
         } else {
             valor = infpos;
-            for (int i = 0; (!TimeOut) && i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
-                PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
-                ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
-                if ((!TimeOut) && points.size() != 0) { //si nos podemos mover
-                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
-                        PosTo = points.get(mov); //Obtenemos una posicion de destino
+            for (int i = 0; (!TimeOut) && i < gs.getNumberOfPiecesPerColor(color); i++) { //Recorregut de les peces del tauler
+                PosFrom = gs.getPiece(color, i);                                //Obtenim la posició de cada peça
+                ArrayList<Point> points = gs.getMoves(PosFrom);                 //Llista de posicions a les que ens podem moure
+                if ((!TimeOut) && points.size() != 0) {                         //Si ens podem moure
+                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //Recorrem la llista de moviments possibles per cada peça
+                        PosTo = points.get(mov);                                //Obtenim una posició de destí
                         GameStatus aux2 = new GameStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
                         //if (TimeOut) return 6;
@@ -139,6 +165,17 @@ public class NotCheckers implements IPlayer, IAuto {
         return valor;
     }
 
+    /**
+     * Funció per determinar el valor màxim de l'heuristica dels moviments segons l'algoritme MiniMax IDS
+     * 
+     * @param gs  Tauler del joc
+     * @param color color del ejugador actual
+     * @param alfa  Valor màxim
+     * @param beta  Valor mínim
+     * @param profunditat  Profunditat de l'arbre
+     * 
+     * @return valor - Valor de la heuristica màxima
+     */
     public int max_Valor(GameStatus gs, CellType color, int alfa, int beta, int profunditat) {
         CellType colorRival = color.opposite(color); //color del contrario -*-=+
         int valor = 0;
@@ -159,12 +196,12 @@ public class NotCheckers implements IPlayer, IAuto {
 
         } else {
             valor = infneg;
-            for (int i = 0; (!TimeOut) && i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
-                PosFrom = gs.getPiece(color, i); //obtenemos la posicion de cada pieza
-                ArrayList<Point> points = gs.getMoves(PosFrom); //lista de posiciones a las que podemos movernos
-                if ((!TimeOut) && points.size() != 0) { //si nos podemos mover
-                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //recorremos la lista de movimientos posibles por cada pieza
-                        PosTo = points.get(mov); //Obtenemos una posicion de destino
+            for (int i = 0; (!TimeOut) && i < gs.getNumberOfPiecesPerColor(color); i++) { //Recorregut de les peces del tauler
+                PosFrom = gs.getPiece(color, i);                                //Obtenim la posició de cada peça
+                ArrayList<Point> points = gs.getMoves(PosFrom);                 //Llista de posicions a les que ens podem moure
+                if ((!TimeOut) && points.size() != 0) {                         //Si ens podem moure
+                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) {//Recorrem la llista de moviments possibles per cada peça
+                        PosTo = points.get(mov);                                //Obtenim una posició de destí
                         GameStatus aux2 = new GameStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
                         valor = Integer.max(valor, min_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
@@ -179,17 +216,35 @@ public class NotCheckers implements IPlayer, IAuto {
         return valor;
     }
 
+    /**
+     * Funció auxiliar de l'algoritme MiniMax IDS on inicialitzem el timeout
+     */
     @Override
     public void timeout() {
         TimeOut = true;
         //TimeOut = false;
     }
 
+    /**
+     * Funció per obtenir el nom del nostre jugador:NotCheckers
+     * 
+     * @return name - Nom del jugador NotCheckers
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * Funció per controlar que mai ens passem de la mida del tauler a l'hora de
+     * recórrer-lo.
+     * 
+     * @param gs  Tauler del joc
+     * @param fila Fila que estem recorrent actualment del tauler
+     * @param columna  Columna que estem recorrent actualment del tauler
+
+     * @return posicion - Retorna true si estem dins del tauler, false si no ho estem
+     */
     public boolean ComprobarPosicion(GameStatus gs, int fila, int columna) {
         boolean posicion = false;
         if (fila >= 0 && fila < gs.getSize() && columna >= 0 && columna < gs.getSize()) {
@@ -199,6 +254,16 @@ public class NotCheckers implements IPlayer, IAuto {
         return posicion;
     }
 
+    /**
+     * Funció que calcula l'heurística del joc segons el pes del nombre de peces
+     * agrupades al tauler, tant de l'oponent com nosaltres.
+     * 
+     * @param gs  Tauler del joc
+     * @param color  color del jugador actual
+     * 
+     * @return nuestras - rival    - Diferència entre el nostre nombre de peces i
+     * el de l'oponent.
+     */
     public int heuristica(GameStatus gs, CellType color) {
 
         int rival = 0;
@@ -211,12 +276,22 @@ public class NotCheckers implements IPlayer, IAuto {
 
     }
 
-    public int Nagrupadas(GameStatus gs, CellType color) {   //numero de fitxes afrupades al tauler
-        int FichasTablero = gs.getNumberOfPiecesPerColor(color);
+    /**
+     * Funció que calcula el nombre de peces agrupades/connectades al tauler segons el
+     * jugador;
+     * Depenent de la quantitat de peces agrupades se'ls hi donarà un pes o un altre.
+     * 
+     * @param gs  Tauler del joc
+     * @param color  color del jugador actual
+     * 
+     * @return Sumatori de pesos segons la quantitat de peces connectades.
+     */
+    public int Nagrupadas(GameStatus gs, CellType color) {                      
+        int FichasTablero = gs.getNumberOfPiecesPerColor(color);                //numero de fitxes agrupades al tauler
         int contador[] = new int[12];
         int medio = 0;
         ArrayList<Point> Num_agrupadas = new ArrayList<Point>();
-        for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) { //recorremos las piezas del tablero
+        for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) {         //Recorregut de les peces del tauler
             Point Pos = gs.getPiece(color, i);
             Num_agrupadas.add(Pos);
         }
@@ -232,16 +307,25 @@ public class NotCheckers implements IPlayer, IAuto {
         return contador[1] * 15 + contador[2] * 25 + contador[3] * 35 + contador[4] * 45 + contador[5] * 55 + contador[6] * 65 + contador[7] * 75 + contador[8] * 85 + contador[9] * 95 + contador[10] * 105 + contador[11] * 115;
     }
 
+    /**
+     * Funció on es determina si les peces estan agrupades. En forma de rellotge
+     * es mira si una peça té un adjacent del mateix color.
+     * 
+     * @param gs  Tauler del joc
+     * @param color  color del jugador actual
+     * @param fila  Fila que estem recorrent actualment del tauler
+     * @param col Columna que estem recorrent actualment del tauler
+     */
     public void Agrupadas(GameStatus gs, CellType color, int fila, int col) {
         int filAux = fila;
         int colAux = col;
-        CellType colorRival = color.opposite(color); //color del contrario -*-=+
+        CellType colorRival = color.opposite(color);                            //color de l'oponent
         Point PosicionActual = new Point(filAux, colAux);
         //System.out.println("principio");
-        if (gs.getPos(filAux, colAux) == colorRival) { //si encontramos la ficha del rival cambiamos la direccion de exploracion
+        if (gs.getPos(filAux, colAux) == colorRival) {                          //Si trobem la peça de l'oponent canviem la direcció d'exploració.
             //System.out.println("primer if");
             return;
-        } else if (gs.getPos(filAux, colAux) == CellType.EMPTY) { //si encontramos una casilla blanca cambiamos la direccion de exploracion
+        } else if (gs.getPos(filAux, colAux) == CellType.EMPTY) {               //Si trobem una casella blanca canviem la direcció d'exploració.
             //System.out.println("segundo if");
             return;
         } else if (posiciones.contains(PosicionActual)) {
@@ -265,6 +349,15 @@ public class NotCheckers implements IPlayer, IAuto {
         }
     }
 
+    /**
+     * Funció on es dona prioritat al centre del tauler per posicionar les peces.
+     * N'hi ha 3 zones que van des del centre, mig i exterior (com si fos
+     * una diana), segons aquesta zona es retorna un pes o un altre.
+     * 
+     * @param pos  Una posició del tauler del tipus Point
+     * 
+     * @return peso - pes segons la zona on estem
+     */
     public int Enmedio(Point pos) {
         int X = pos.x;
         int Y = pos.y;

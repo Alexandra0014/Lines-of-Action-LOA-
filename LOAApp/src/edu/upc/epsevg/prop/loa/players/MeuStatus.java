@@ -15,7 +15,7 @@ import java.util.Random;
  * Es com si estiguesim en la classe de GameStautus pero realment no hi estem,
  * és com un parasit
  *
- * @author Usuario
+ * @author Omara Aibar i Alexandra Espinosa
  */
 public class MeuStatus extends GameStatus { 
 
@@ -31,7 +31,14 @@ public class MeuStatus extends GameStatus {
     
     
     
-    //FER UN GET HAURISTICA ACÁ
+    /**
+     * Funció crida de l'heurística feta a la classe NotCheckers
+     * 
+     *
+     * @param gs Tauler on es farà el millor moviment donat
+     * 
+     * @return h - Valor de l'heurística trobada al NotCheckers
+     */
     public int getHeuristica(GameStatus gs) {
         CellType color = gs.getCurrentPlayer();
         //int npiezas = gs.getNumberOfPiecesPerColor(color);
