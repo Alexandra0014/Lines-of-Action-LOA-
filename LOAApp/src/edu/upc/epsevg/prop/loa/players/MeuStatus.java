@@ -32,29 +32,26 @@ public class MeuStatus extends GameStatus {
     //Globals
     static int ZobristTable[][][] = new int[8][8][2]; //[X][Y][color]
     CellType color = this.getCurrentPlayer();
-    //int hashKey = 0;
 
     /**
      * Funció crida de l'heurística feta a la classe NotCheckers
-     *
      *
      * @param gs Tauler on es farà el millor moviment donat
      *
      * @return h - Valor de l'heurística trobada al NotCheckers
      */
-    /*
+    
     public int getHeuristica(GameStatus gs) {
-        //CellType color = gs.getCurrentPlayer();
-        //int npiezas = gs.getNumberOfPiecesPerColor(color);
         NotCheckers NC = new NotCheckers("NotCheckers", 4);
         int h = NC.heuristica(gs, color);
         return h;
     }
-*/
+
     /**
      * S'encarrega de generar un numero aleatori
      * @return Retorna un numero aleatori
      */
+    
     //Generador random pot generar tamb negatius
     public static int randomValue() {
         SecureRandom random = new SecureRandom();
@@ -69,7 +66,6 @@ public class MeuStatus extends GameStatus {
             for (int j = 0; j < 8; j++) {
                 for (int piece = 0; piece < 2; piece++) {
                     ZobristTable[i][j][piece] = randomValue();
-                    //System.out.println("i: " + i + "j: " + j + "valores:" + ZobristTable[i][j][piece]);
                 }
             }
         }
@@ -79,7 +75,7 @@ public class MeuStatus extends GameStatus {
      * Fa el calcul de la XOR per a cada posicio sempre que la posicio no estigui buida
      * @return hashValue Retorna el valor de la hash
      */
-    /*
+    
     //Calcula el valor hash d'un tauler donat (fa la XOR)
     public int HashValues() {
         int hashValue = 0; //[X][Y][color]
@@ -87,22 +83,20 @@ public class MeuStatus extends GameStatus {
             for (int j = 0; j < 8; j++) {
                 CellType pos = this.getPos(i, j);
                 if (pos != CellType.EMPTY) {
-                    //CellType piece = ms.getCurrentPlayer();
                     hashValue ^= ZobristTable[i][j][color.toColor01(color)];
                 }
             }
         }
         return hashValue;
     }
-*/
+
    /**
     * S'encarrega d'actualitzar el valor de la hash fent els diferents calculs de les XOR
     * @param PosFrom Indica la posicio origen
     * @param PosTo Indica la posicio destí
     */
     public void actualizarHash(Point PosFrom, Point PosTo) {
-        //System.out.println("HASHKEY: "+hashKey);
-        int hashKey = 0;
+        int hashKey = HashValues();
         setValorRandomCasillas();
         CellType EstatCasilla;
         EstatCasilla = this.getPos(PosTo);

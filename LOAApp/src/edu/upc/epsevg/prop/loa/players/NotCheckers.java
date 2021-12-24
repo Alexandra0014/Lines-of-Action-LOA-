@@ -31,7 +31,7 @@ public class NotCheckers implements IPlayer, IAuto {
     int prof = 8;
     int infneg = -99999999;    //-inf
     int infpos = 99999999;     // +inf
-    int cont = 0;             //contador dels nodes explorats (OJO HAY UNA FUNCIÓN EN Move que te lo dice)
+    int cont = 0;             //contador dels nodes explorats
     ArrayList<Point> posiciones;
     
 
@@ -69,7 +69,6 @@ public class NotCheckers implements IPlayer, IAuto {
         int millorMov = 0;                                                      //Millor pos. on es possarà les fitxes
         int heu = 0;                                                            //Resultat de l'heuristica
         CellType color = gs.getCurrentPlayer();
-        //int profunditat = prof;
         Point PosFrom = new Point(0, 0);
         Point PosTo = new Point(0, 0);
         Point BestPosFrom = new Point(0, 0);
@@ -81,19 +80,17 @@ public class NotCheckers implements IPlayer, IAuto {
         for (int depth = 1; (!TimeOut) && depth <= prof; depth++) {
             maxDepth = depth;
             for (int i = 0; (!TimeOut) && i < gs.getNumberOfPiecesPerColor(color); i++) { //Recorrem les peces del tauler
-                PosFrom = gs.getPiece(color, i);                                //Obtenim la posició de cada peça
-                ArrayList<Point> points = gs.getMoves(PosFrom);                 //Llista de posicions a les que ens podem moure
-                if ((!TimeOut) && !points.isEmpty()) {                          //Si ens podem moure
-                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //Recorrem la llista de moviments possibles per cada peça
-                        PosTo = points.get(mov);                                //Obtenim una posició de destí
+                PosFrom = gs.getPiece(color, i);                                          //Obtenim la posició de cada peça
+                ArrayList<Point> points = gs.getMoves(PosFrom);                           //Llista de posicions a les que ens podem moure
+                if ((!TimeOut) && !points.isEmpty()) {                                    //Si ens podem moure
+                    for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) {         //Recorrem la llista de moviments possibles per cada peça
+                        PosTo = points.get(mov);                                          //Obtenim una posició de destí
                         MeuStatus aux = new MeuStatus(gs);
                         aux.movePiece(PosFrom, PosTo);
                         CellType colorRival = color.opposite(color);
-                        //gs.actualizarHash(gs, PosFrom, PosTo, color);
                         heu = min_Valor(aux, colorRival, alfa, beta, depth - 1);
                         if (valor <= heu) {
                             valor = heu;
-                            //movi = new Move(PosFrom, PosTo, cont, depth, SearchType.MINIMAX_IDS);
                             BestPosFrom = PosFrom;
                             BestPosTo = PosTo;
                         }
@@ -106,10 +103,7 @@ public class NotCheckers implements IPlayer, IAuto {
             }
         }
 
-        movi = new Move(FinalBestPosFrom, FinalBestPosTo, cont, maxDepth, SearchType.MINIMAX_IDS);
-        System.out.println("AuxMovi: " + movi.getFrom() + "" + movi.getTo());
-        System.out.println("max Depth: " + movi.getMaxDepthReached() + "numberNodes: " + movi.getNumerOfNodesExplored() + "realNodes " +cont );
-        //System.out.println("mensaje" + heuristica(gs, color));
+        movi = new Move(FinalBestPosFrom, FinalBestPosTo, cont, maxDepth, SearchType.MINIMAX_IDS);      
         return movi;
     }
 
@@ -154,7 +148,6 @@ public class NotCheckers implements IPlayer, IAuto {
                         PosTo = points.get(mov);                                //Obtenim una posició de destí
                         MeuStatus aux2 = new MeuStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
-                        //if (TimeOut) return 6;
                         valor = Integer.min(valor, max_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
                         beta = Integer.min(valor, beta);
                         if (beta <= alfa) {
@@ -224,7 +217,6 @@ public class NotCheckers implements IPlayer, IAuto {
     @Override
     public void timeout() {
         TimeOut = true;
-        //TimeOut = false;
     }
 
     /**
@@ -298,8 +290,6 @@ public class NotCheckers implements IPlayer, IAuto {
         for (Point Pos : Pos_peces) {
             posiciones.clear();
             Agrupadas(gs, color, Pos.x, Pos.y);
-            //System.out.println("elem: "+posiciones);
-            //System.out.println("Posicion: "+Pos);
             zona = Zonas(Pos);
             contador[posiciones.size()] += zona;
         }
