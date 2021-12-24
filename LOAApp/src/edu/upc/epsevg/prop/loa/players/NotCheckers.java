@@ -58,7 +58,6 @@ public class NotCheckers implements IPlayer, IAuto {
      */
     @Override
     public Move move(GameStatus gs) {
-        MeuStatus ms = new MeuStatus(gs);
         cont = 0;
         int valor = infneg;
         int alfa = infneg;
@@ -87,10 +86,10 @@ public class NotCheckers implements IPlayer, IAuto {
                 if ((!TimeOut) && !points.isEmpty()) {                          //Si ens podem moure
                     for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //Recorrem la llista de moviments possibles per cada peça
                         PosTo = points.get(mov);                                //Obtenim una posició de destí
-                        GameStatus aux = new GameStatus(gs);
+                        MeuStatus aux = new MeuStatus(gs);
                         aux.movePiece(PosFrom, PosTo);
                         CellType colorRival = color.opposite(color);
-                        //ms.actualizarHash(gs, PosFrom, PosTo, color);
+                        //gs.actualizarHash(gs, PosFrom, PosTo, color);
                         heu = min_Valor(aux, colorRival, alfa, beta, depth - 1);
                         if (valor <= heu) {
                             valor = heu;
@@ -153,7 +152,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 if ((!TimeOut) && points.size() != 0) {                         //Si ens podem moure
                     for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) { //Recorrem la llista de moviments possibles per cada peça
                         PosTo = points.get(mov);                                //Obtenim una posició de destí
-                        GameStatus aux2 = new GameStatus(gs);
+                        MeuStatus aux2 = new MeuStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
                         //if (TimeOut) return 6;
                         valor = Integer.min(valor, max_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
@@ -205,7 +204,7 @@ public class NotCheckers implements IPlayer, IAuto {
                 if ((!TimeOut) && points.size() != 0) {                         //Si ens podem moure
                     for (int mov = 0; (!TimeOut) && mov < points.size(); mov++) {//Recorrem la llista de moviments possibles per cada peça
                         PosTo = points.get(mov);                                //Obtenim una posició de destí
-                        GameStatus aux2 = new GameStatus(gs);
+                        MeuStatus aux2 = new MeuStatus(gs);
                         aux2.movePiece(PosFrom, PosTo);
                         valor = Integer.max(valor, min_Valor(aux2, colorRival, alfa, beta, profunditat - 1));
                         alfa = Integer.max(valor, alfa);
@@ -268,7 +267,6 @@ public class NotCheckers implements IPlayer, IAuto {
      * el de l'oponent.
      */
     public int heuristica(GameStatus gs, CellType color) {
-
         int rival = 0;
         int nuestras = 0;
         CellType colorRival = color.opposite(color);
@@ -280,32 +278,30 @@ public class NotCheckers implements IPlayer, IAuto {
     }
 
     /**
-     * Funció que calcula el nombre de peces agrupades/connectades al tauler segons el
-     * jugador;
-     * Depenent de la quantitat de peces agrupades se'ls hi donarà un pes o un altre, 
-     * tenint en compte en quina zona del tauler esta.
+     * Funció encarregada de calcular el pes segons el nombre de peces agrupades/connectades
+     * d’un jugador, contra més quantitat de peces més pes, tenint en compte en 
+     * quina zona del tauler esta.
      * 
      * @param gs  Tauler del joc
      * @param color  color del jugador actual
      * 
      * @return Sumatori de pesos segons la quantitat de peces connectades.
      */
-    public int Nagrupadas(GameStatus gs, CellType color) {                      
-        int FichasTablero = gs.getNumberOfPiecesPerColor(color);                //numero de fitxes agrupades al tauler
+    public int Nagrupadas(GameStatus gs, CellType color) {               
         int contador[] = new int[12];
-        int medio = 0;
-        ArrayList<Point> Num_agrupadas = new ArrayList<Point>();
+        int zona = 0;
+        ArrayList<Point> Pos_peces = new ArrayList<Point>();
         for (int i = 0; i < gs.getNumberOfPiecesPerColor(color); i++) {         //Recorregut de les peces del tauler
             Point Pos = gs.getPiece(color, i);
-            Num_agrupadas.add(Pos);
+            Pos_peces.add(Pos);
         }
-        for (Point Pos : Num_agrupadas) {
+        for (Point Pos : Pos_peces) {
             posiciones.clear();
             Agrupadas(gs, color, Pos.x, Pos.y);
             //System.out.println("elem: "+posiciones);
             //System.out.println("Posicion: "+Pos);
-            medio = Enmedio(Pos);
-            contador[posiciones.size()] += medio;
+            zona = Zonas(Pos);
+            contador[posiciones.size()] += zona;
         }
 
         return contador[1] * 15 + contador[2] * 25 + contador[3] * 35 + contador[4] * 45 + contador[5] * 55 + contador[6] * 65 + contador[7] * 75 + contador[8] * 85 + contador[9] * 95 + contador[10] * 105 + contador[11] * 115;
@@ -354,26 +350,19 @@ public class NotCheckers implements IPlayer, IAuto {
      * 
      * @return peso - pes segons la zona on estem
      */
-    public int Enmedio(Point pos) {
+    public int Zonas(Point pos) {
         int X = pos.x;
         int Y = pos.y;
         int peso = 0;
-        if (X >= 2 && X <= 5 && Y >= 2 && Y <= 5) {   //Zona ROJA -> CENTRO
+        if (X >= 2 && X <= 5 && Y >= 2 && Y <= 5) {   //Zona VERDE -> CENTRO
             peso = 10;
-        } else if (X >= 1 && X <= 6 && Y >= 1 && Y <= 6 && !(X >= 2 && X <= 5 && Y >= 2 && Y <= 5)) { //Zona AZUL -> MEDIO
+        } else if (X >= 1 && X <= 6 && Y >= 1 && Y <= 6 && !(X >= 2 && X <= 5 && Y >= 2 && Y <= 5)) { //Zona AMARILLO -> MEDIO
             peso = 3;
         } 
-        else {        //ZONA VERDE -> EXTERIOR
+        else {        //ZONA ROJO -> EXTERIOR
             peso = 1;
         }
         return peso;
     }
     
-    public int main() {
-        System.out.println("estamos en el main");
-
-        return 0;
-    }
-
-
 }

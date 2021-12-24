@@ -51,12 +51,18 @@ public class MeuStatus extends GameStatus {
         return h;
     }
 */
+    /**
+     * S'encarrega de generar un numero aleatori
+     * @return Retorna un numero aleatori
+     */
     //Generador random pot generar tamb negatius
     public static int randomValue() {
         SecureRandom random = new SecureRandom();
         return random.nextInt();
     }
-
+    /**
+     * S'encarrega d'assignar dos valors aleatoris per a cada posició de la matriu
+     */
     //Inicializador de taula
     public void setValorRandomCasillas() {
         for (int i = 0; i < 8; i++) {
@@ -69,6 +75,11 @@ public class MeuStatus extends GameStatus {
         }
     }
 
+    /**
+     * Fa el calcul de la XOR per a cada posicio sempre que la posicio no estigui buida
+     * @return hashValue Retorna el valor de la hash
+     */
+    /*
     //Calcula el valor hash d'un tauler donat (fa la XOR)
     public int HashValues() {
         int hashValue = 0; //[X][Y][color]
@@ -83,35 +94,15 @@ public class MeuStatus extends GameStatus {
         }
         return hashValue;
     }
-
-    /*
-    public int actualizarHash(GameStatus ms) {
-        NotCheckers nc = new NotCheckers("NotCheckers", 4);
-        Move moviment = nc.move(ms);
-        Point PosFrom = moviment.getFrom();
-        Point PosTo = moviment.getTo();
-        CellType EstatCasilla;
-        CellType color = ms.getCurrentPlayer();
-        EstatCasilla = ms.getPos(PosTo);
-        CellType ColorRival = color.opposite(color);
-        if (EstatCasilla != CellType.EMPTY) {
-            if (EstatCasilla == ColorRival) {
-                hashKey ^= ZobristTable[PosFrom.x][PosFrom.y][color.toColor01(color)];        //Posició origen 
-                hashKey ^= ZobristTable[PosTo.x][PosTo.y][ColorRival.toColor01(ColorRival)];  //Posició destí amb el color contrari
-                hashKey ^= ZobristTable[PosTo.x][PosTo.y][color.toColor01(color)];            //Posició destí amb el teu color 
-            }
-            if (EstatCasilla == color) {
-                hashKey ^= ZobristTable[PosFrom.x][PosFrom.y][color.toColor01(color)];    //Posició origen 
-                hashKey ^= ZobristTable[PosTo.x][PosTo.y][color.toColor01(color)];        //Posició destí amb el teu color
-            }
-            super.movePiece(PosFrom, PosTo);
-        }
-        return hashKey;
-    }
-     */
+*/
+   /**
+    * S'encarrega d'actualitzar el valor de la hash fent els diferents calculs de les XOR
+    * @param PosFrom Indica la posicio origen
+    * @param PosTo Indica la posicio destí
+    */
     public void actualizarHash(Point PosFrom, Point PosTo) {
         //System.out.println("HASHKEY: "+hashKey);
-        int hashKey = HashValues();
+        int hashKey = 0;
         setValorRandomCasillas();
         CellType EstatCasilla;
         EstatCasilla = this.getPos(PosTo);
@@ -126,14 +117,15 @@ public class MeuStatus extends GameStatus {
                 hashKey ^= ZobristTable[PosFrom.x][PosFrom.y][color.toColor01(color)];    //Posició origen 
                 hashKey ^= ZobristTable[PosTo.x][PosTo.y][color.toColor01(color)];        //Posició destí amb el teu color
             }
-            //super.movePiece(PosFrom, PosTo);
+         
             System.out.println("hemos llegado a actualizar "+hashKey);
         }
     }
-
+/*
     @Override
     public void movePiece(Point PosFrom, Point PosTo) {
         actualizarHash(PosFrom,PosTo);
-        super.movePiece(PosFrom, PosTo); //To change body of generated methods, choose Tools | Templates.
+        super.movePiece(PosFrom, PosTo);
     }
+*/
 }
