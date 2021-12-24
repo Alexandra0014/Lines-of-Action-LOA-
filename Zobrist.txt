@@ -11,15 +11,15 @@ Implementacion:
 		- Cuando traemos la clase GameStatus a el MeuGameStatus es cuando incializamos la hash
 			- Hacemos la hash = 0
 
-		- Funcion void setValorRandomCasillas(tablero)
+		- Funcion void setValorRandomCasillas(tablero) -> HECHA
 
-		- Funcion int getValorRandomCasillas(tablero, posicion, color)
+		- Funcion int getValorRandomCasillas(tablero, posicion, color) -> CREO QUE NO HACE FALTA, solo si la utilizamos en otra clase
 			- obtenemos el valor de la casilla segun el color
 
 		- Funcion int getHash()
 			-obtenemos el valor de la hash
 
-		- Funcion void actualizarHash(hash, tablero, posicion, color)
+		- Funcion void actualizarHash(hash, tablero, posicion, color) -> HECHA
 			- calculo de la XOR 
 				- obtenemos el valor getHash() 
 				- obtenemos el valor getValorRandomCasillas()

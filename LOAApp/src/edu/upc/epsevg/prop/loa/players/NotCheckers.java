@@ -58,6 +58,7 @@ public class NotCheckers implements IPlayer, IAuto {
      */
     @Override
     public Move move(GameStatus gs) {
+        MeuStatus ms = new MeuStatus(gs);
         cont = 0;
         int valor = infneg;
         int alfa = infneg;
@@ -89,6 +90,7 @@ public class NotCheckers implements IPlayer, IAuto {
                         GameStatus aux = new GameStatus(gs);
                         aux.movePiece(PosFrom, PosTo);
                         CellType colorRival = color.opposite(color);
+                        //ms.actualizarHash(gs, PosFrom, PosTo, color);
                         heu = min_Valor(aux, colorRival, alfa, beta, depth - 1);
                         if (valor <= heu) {
                             valor = heu;
@@ -112,6 +114,7 @@ public class NotCheckers implements IPlayer, IAuto {
         return movi;
     }
 
+ 
     /**
      * Funció per determinar el valor mínim de l'heuristica dels moviments segons l'algoritme MiniMax IDS
      * 
@@ -279,7 +282,8 @@ public class NotCheckers implements IPlayer, IAuto {
     /**
      * Funció que calcula el nombre de peces agrupades/connectades al tauler segons el
      * jugador;
-     * Depenent de la quantitat de peces agrupades se'ls hi donarà un pes o un altre.
+     * Depenent de la quantitat de peces agrupades se'ls hi donarà un pes o un altre, 
+     * tenint en compte en quina zona del tauler esta.
      * 
      * @param gs  Tauler del joc
      * @param color  color del jugador actual
@@ -321,26 +325,18 @@ public class NotCheckers implements IPlayer, IAuto {
         int colAux = col;
         CellType colorRival = color.opposite(color);                            //color de l'oponent
         Point PosicionActual = new Point(filAux, colAux);
-        //System.out.println("principio");
         if (gs.getPos(filAux, colAux) == colorRival) {                          //Si trobem la peça de l'oponent canviem la direcció d'exploració.
-            //System.out.println("primer if");
             return;
-        } else if (gs.getPos(filAux, colAux) == CellType.EMPTY) {               //Si trobem una casella blanca canviem la direcció d'exploració.
-            //System.out.println("segundo if");
+        } else if (gs.getPos(filAux, colAux) == CellType.EMPTY) {               //Si trobem una casella buida canviem la direcció d'exploració.
             return;
         } else if (posiciones.contains(PosicionActual)) {
-            //System.out.println("tercer if");
             return;
         } else {
-            /*introducir fil, col a las posiciones*/
             posiciones.add(PosicionActual);
             for (int i = -1; i <= 1; i++) {
                 for (int j = -1; j <= 1; j++) {
-                    //System.out.println("dentro del for: "+i+" "+j);
                     if (!(i == 0 && j == 0)) {
-                        //System.out.println("antes del if: "+(filAux + i)+" "+(colAux + j));
                         if (ComprobarPosicion(gs, filAux + i, colAux + j)) {
-                            //System.out.println("añadiendo: "+(filAux + i)+" "+(colAux + j));
                             Agrupadas(gs, color, filAux + i, colAux + j);
                         }
                     }
@@ -362,17 +358,22 @@ public class NotCheckers implements IPlayer, IAuto {
         int X = pos.x;
         int Y = pos.y;
         int peso = 0;
-        if (X >= 2 && X <= 5 && Y >= 2 && Y <= 5) {   //Zona ROJA - CENTRO
+        if (X >= 2 && X <= 5 && Y >= 2 && Y <= 5) {   //Zona ROJA -> CENTRO
             peso = 10;
-        } else if (X >= 1 && X <= 6 && Y >= 1 && Y <= 6 && !(X >= 2 && X <= 5 && Y >= 2 && Y <= 5)) { //Zona AZUL - MEDIO
+        } else if (X >= 1 && X <= 6 && Y >= 1 && Y <= 6 && !(X >= 2 && X <= 5 && Y >= 2 && Y <= 5)) { //Zona AZUL -> MEDIO
             peso = 3;
         } 
-        else {        //ZONA VERDE - EXTERIOR
+        else {        //ZONA VERDE -> EXTERIOR
             peso = 1;
         }
         return peso;
     }
     
+    public int main() {
+        System.out.println("estamos en el main");
+
+        return 0;
+    }
 
 
 }
